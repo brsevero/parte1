@@ -27,19 +27,35 @@ plt.show()
 plt.subplot(121),plt.imshow(thresh2,'gray')
 plt.title('Imagem Limeada borrao'), plt.xticks([]), plt.yticks([])
 plt.subplot(122), plt.imshow(lap,"gray")
-plt.title('laplace'), plt.xticks([]), plt.yticks([])
+plt.title('Laplace'), plt.xticks([]), plt.yticks([])
 plt.show()
 
 """In OpenCV, finding contours is like finding white object from black background.
 So remember, object to be found should be white and background should be black."""
 
 #função que retorna a identificação dos contornos
-lista, hierarquia = cv.findContours(lap, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+lista, hierarquia = cv.findContours(lap, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE) #2 ultimos parametros são importantes
 
 #função para desenhar os contornos
 final = cv.drawContours(img, lista, -1, (0,255,0), 3)
-final = cv.resize(final, (550, 700))  
+final = cv.resize(final, (550, 700))
 cv.imshow("ultima",final)
 cv.waitKey(0)
 print("quantidade de objetos na foto: " + str(len(lista)))
- 
+
+total = 0
+for i in lista:
+    total += 1
+    M = cv.moments(i)
+
+    #centroide é dado pela relação cx = M10/M00 e cy = M01/M00
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+
+    #area
+    area = cv.contourArea(i)
+
+    #perimetro
+    perimeter = cv.arcLength(i,True)
+
+    print("Objeto {}:\ncentro:({},{})\narea: {}\nperimetro {}\n".format(total,cx,cy,area,perimeter))
