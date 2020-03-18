@@ -7,8 +7,8 @@ img = cv.cvtColor(img, cv.COLOR_BGR2GRAY) #convetendo pra gray
 #fazendo um borrão simples
 borrao = cv.blur(img,(9,9))
 
-T,thresh1 = cv.threshold(img,127,255,cv.THRESH_BINARY_INV) #faz uma limearização binaria com a imagem original
-T,thresh2 = cv.threshold(borrao,127,255,cv.THRESH_BINARY_INV) #A mesma coisa usando a imagem borrada
+T,thresh1 = cv.threshold(img,115,255,cv.THRESH_BINARY_INV) #faz uma limearização binaria com a imagem original
+T,thresh2 = cv.threshold(borrao,115,255,cv.THRESH_BINARY_INV) #A mesma coisa usando a imagem borrada
 
 #funcão que retorna uma img com contornos
 lap = cv.Laplacian(thresh2, cv.CV_64F) 
@@ -34,11 +34,12 @@ plt.show()
 So remember, object to be found should be white and background should be black."""
 
 #função que retorna a identificação dos contornos
-lista, hierarquia = cv.findContours(lap, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+lista, hierarquia = cv.findContours(lap, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
 #função para desenhar os contornos
 final = cv.drawContours(img, lista, -1, (0,255,0), 3)
 final = cv.resize(final, (550, 700))  
 cv.imshow("ultima",final)
 cv.waitKey(0)
+print("quantidade de objetos na foto: " + str(len(lista)))
  
