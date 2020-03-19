@@ -38,9 +38,8 @@ lista, hierarquia = cv.findContours(lap, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPL
 
 #função para desenhar os contornos
 final = cv.drawContours(img, lista, -1, (0,255,0), 3)
-final = cv.resize(final, (550, 700))
-cv.imshow("ultima",final)
-cv.waitKey(0)
+#cv.imshow("ultima",final)
+#cv.waitKey(0)
 print("quantidade de objetos na foto: " + str(len(lista)))
 
 total = 0
@@ -51,6 +50,7 @@ for i in lista:
     #centroide é dado pela relação cx = M10/M00 e cy = M01/M00
     cx = int(M['m10']/M['m00'])
     cy = int(M['m01']/M['m00'])
+    posicao = (cx-150,cy)
 
     #area
     area = cv.contourArea(i)
@@ -58,4 +58,19 @@ for i in lista:
     #perimetro
     perimeter = cv.arcLength(i,True)
 
+    cv.putText(final,
+                '{} {}'.format(total,area),
+                posicao,
+                cv.FONT_HERSHEY_SIMPLEX,
+                2,
+                255,
+                3)
+
     print("Objeto {}:\ncentro:({},{})\narea: {}\nperimetro {}\n".format(total,cx,cy,area,perimeter))
+"""final = cv.resize(final, (550, 700))
+cv.imshow("ultima",final)
+cv.waitKey(0)"""
+
+plt.imshow(final,cmap=plt.cm.gray)
+plt.axis('off')
+plt.show()
